@@ -1,0 +1,33 @@
+{
+  "title": "Dreame Vacuum Plugin",
+  "description": "Matterbridge plugin for Dreame vacuum cleaners with Matter 1.4 support",
+  "type": "object",
+  "required": ["username", "password", "country"],
+  "properties": {
+    "username": {
+      "description": "Dreame account email or phone number",
+      "type": "string"
+    },
+    "password": {
+      "description": "Dreame account password",
+      "type": "string"
+    },
+    "country": {
+      "description": "Cloud region for Dreame API",
+      "type": "string",
+      "enum": ["cn", "eu", "us", "sg", "ru", "in"],
+      "default": "us"
+    },
+    "refreshInterval": {
+      "description": "Status polling interval in seconds (minimum 30)",
+      "type": "number",
+      "default": 120,
+      "minimum": 30
+    },
+    "unregisterOnShutdown": {
+      "description": "Unregister devices when plugin shuts down (development only)",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

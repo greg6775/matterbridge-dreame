@@ -1,46 +1,40 @@
 {
-  "name": "matterbridge-plugin-template",
-  "version": "1.0.4",
-  "description": "Matterbridge Template Plugin",
-  "author": "https://github.com/Luligu",
-  "homepage": "https://github.com/Luligu/matterbridge-plugin-template/blob/main/README.md",
+  "name": "matterbridge-dreame",
+  "version": "0.1.0",
+  "description": "Matterbridge plugin for Dreame vacuum cleaners with Matter 1.4 RVC support",
+  "author": "greg6775",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/module.js",
   "types": "dist/module.d.ts",
   "engines": {
-    "node": ">=20.0.0 <21.0.0 || >=22.0.0 <23.0.0 || >=24.0.0 <25.0.0"
+    "node": ">=22.0.0 <23.0.0 || >=24.0.0 <25.0.0 || >=25.0.0 <26.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Luligu/matterbridge-plugin-template.git"
+    "url": "git+https://github.com/greg6775/matterbridge-dreame.git"
   },
   "bugs": {
-    "url": "https://github.com/Luligu/matterbridge-plugin-template/issues"
+    "url": "https://github.com/greg6775/matterbridge-dreame/issues"
   },
-  "funding": {
-    "type": "buymeacoffee",
-    "url": "https://www.buymeacoffee.com/luligugithub"
-  },
+  "homepage": "https://github.com/greg6775/matterbridge-dreame#readme",
   "keywords": [
     "matterbridge",
     "plugin",
-    "template",
+    "dreame",
+    "vacuum",
+    "robot",
     "matter.js",
-    "matter-node.js",
     "matter",
+    "matter-1.4",
+    "rvc",
     "matterprotocol",
     "iot",
     "smarthome",
-    "connectedthings",
-    "hap",
     "homekit",
-    "siri",
     "google-home",
     "alexa",
-    "homeassistant",
-    "smartthings",
-    "ewelink"
+    "homeassistant"
   ],
   "scripts": {
     "start": "matterbridge",
@@ -97,6 +91,7 @@
     "matterbridge:list": "matterbridge -list"
   },
   "dependencies": {
+    "mqtt": "^5.14.1",
     "node-ansi-logger": "3.1.1",
     "node-persist-manager": "2.0.0"
   },
@@ -104,24 +99,24 @@
     "@eslint/js": "9.39.2",
     "@jest/globals": "30.2.0",
     "@types/jest": "30.0.0",
-    "@types/node": "25.0.3",
-    "@vitest/coverage-v8": "4.0.16",
-    "@vitest/eslint-plugin": "1.6.4",
+    "@types/node": "25.0.9",
+    "@vitest/coverage-v8": "4.0.17",
+    "@vitest/eslint-plugin": "1.6.6",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jest": "29.11.0",
-    "eslint-plugin-jsdoc": "61.5.0",
-    "eslint-plugin-n": "17.23.1",
-    "eslint-plugin-prettier": "5.5.4",
+    "eslint-plugin-jest": "29.12.1",
+    "eslint-plugin-jsdoc": "^62.3.0",
+    "eslint-plugin-n": "17.23.2",
+    "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-promise": "7.2.1",
     "jest": "30.2.0",
-    "npm-check-updates": "19.2.0",
-    "prettier": "3.7.4",
+    "npm-check-updates": "19.3.1",
+    "prettier": "3.8.0",
     "shx": "0.4.0",
     "ts-jest": "29.4.6",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.50.1",
-    "vitest": "4.0.16"
+    "typescript-eslint": "^8.53.1",
+    "vitest": "4.0.17"
   }
 }

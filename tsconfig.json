@@ -8,8 +8,8 @@
     "rootDir": "./src",
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": true,
+    "allowJs": false,
+    "checkJs": false,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -25,5 +25,5 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/__test__/*"]
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/__test__/*", "node_modules", "**/node_modules/*"]
 }
