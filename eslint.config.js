@@ -47,12 +47,19 @@ export default defineConfig([
       'n/prefer-node-protocol': 'error', // Prefer using 'node:' protocol for built-in modules
       'n/no-extraneous-import': 'off', // Allow imports from node_modules
       'n/no-unpublished-import': 'off', // Allow imports from unpublished packages
+      'n/no-missing-import': 'off', // Matterbridge is linked, not installed
       'promise/always-return': 'warn', // Ensure promises always return a value
       'promise/catch-or-return': 'warn', // Ensure promises are either caught or returned
       'promise/no-nesting': 'warn', // Avoid nesting promises
       'jsdoc/tag-lines': ['error', 'any', { startLines: 1, endLines: 0 }], // Require a blank line before JSDoc comments
       'jsdoc/check-tag-names': ['warn', { definedTags: ['created', 'contributor', 'remarks'] }], // Allow custom tags
       'jsdoc/no-undefined-types': 'off',
+      'jsdoc/require-jsdoc': 'off', // Don't require JSDoc on everything
+      'jsdoc/require-param': 'off', // Don't require @param tags
+      'jsdoc/require-param-type': 'off', // TypeScript handles types
+      'jsdoc/require-param-description': 'off', // Optional descriptions
+      'jsdoc/require-returns': 'off', // Don't require @returns
+      'jsdoc/require-returns-type': 'off', // TypeScript handles return types
       'prettier/prettier': 'warn', // Use Prettier for formatting
     },
   },

@@ -115,11 +115,7 @@ export class DreameCloudProtocol {
       // For now, re-authenticate with stored credentials
       if (this.loginCredentials) {
         this.log.info('Re-authenticating with stored credentials...');
-        const result = await this.login(
-          this.loginCredentials.username,
-          this.loginCredentials.password,
-          this.loginCredentials.country,
-        );
+        const result = await this.login(this.loginCredentials.username, this.loginCredentials.password, this.loginCredentials.country);
         return result.success;
       }
 
@@ -1219,10 +1215,10 @@ export class DreameCloudProtocol {
             if (freshStatus) {
               this.log.info(`Poll returned fresh status: state=${freshStatus.state}, status=${freshStatus.status}`);
               const callback = this.deviceStatusCallbacks.get(did);
-              if (callback) {
-                callback(freshStatus);
-              }
+              // eslint-disable-next-line promise/no-callback-in-promise
+              callback?.(freshStatus);
             }
+            return undefined;
           })
           .catch((e) => this.log.debug(`Status poll failed: ${e}`));
         return null; // Don't return stale cached values - wait for poll result
@@ -1499,7 +1495,11 @@ export class DreameCloudProtocol {
       await this.sendCommand(did, 'action', [MIOT_ACTIONS.charge.siid, MIOT_ACTIONS.charge.aiid, []]);
 
       if (confirm) {
-        return this.confirmCommandSuccess(did, [DreameState.Returning, DreameState.GoCharging, DreameState.Charging, DreameState.Idle], [DreameStatus.BackHome, DreameStatus.Charging, DreameStatus.Standby]);
+        return this.confirmCommandSuccess(
+          did,
+          [DreameState.Returning, DreameState.GoCharging, DreameState.Charging, DreameState.Idle],
+          [DreameStatus.BackHome, DreameStatus.Charging, DreameStatus.Standby],
+        );
       }
       return true;
     } catch (error) {

@@ -1,19 +1,19 @@
 import path from 'node:path';
 
-import { vi, describe, beforeEach, afterAll } from 'vitest';
-import { AnsiLogger, LogLevel } from 'matterbridge/logger';
+import { vi, describe, beforeEach, afterAll, it, expect } from 'vitest';
+import { AnsiLogger } from 'matterbridge/logger';
 import { MatterbridgeEndpoint, PlatformConfig, PlatformMatterbridge, SystemInformation } from 'matterbridge';
 import { VendorId } from 'matterbridge/matter';
 
-import { TemplatePlatform } from '../src/module.ts';
+import { DreamePlatform } from '../src/module.ts';
 
 const mockLog = {
-  fatal: vi.fn((message: string, ...parameters: any[]) => {}),
-  error: vi.fn((message: string, ...parameters: any[]) => {}),
-  warn: vi.fn((message: string, ...parameters: any[]) => {}),
-  notice: vi.fn((message: string, ...parameters: any[]) => {}),
-  info: vi.fn((message: string, ...parameters: any[]) => {}),
-  debug: vi.fn((message: string, ...parameters: any[]) => {}),
+  fatal: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
+  error: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
+  warn: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
+  notice: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
+  info: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
+  debug: vi.fn((_message: string, ..._parameters: unknown[]) => {}),
 } as unknown as AnsiLogger;
 
 const mockMatterbridge: PlatformMatterbridge = {
@@ -23,15 +23,15 @@ const mockMatterbridge: PlatformMatterbridge = {
     osRelease: 'x.y.z',
     nodeVersion: '22.10.0',
   } as unknown as SystemInformation,
-  rootDirectory: path.join('jest', 'TemplatePlugin'),
-  homeDirectory: path.join('jest', 'TemplatePlugin'),
-  matterbridgeDirectory: path.join('jest', 'TemplatePlugin', '.matterbridge'),
-  matterbridgePluginDirectory: path.join('jest', 'TemplatePlugin', 'Matterbridge'),
-  matterbridgeCertDirectory: path.join('jest', 'TemplatePlugin', '.mattercert'),
-  globalModulesDirectory: path.join('jest', 'TemplatePlugin', 'node_modules'),
-  matterbridgeVersion: '3.3.0',
-  matterbridgeLatestVersion: '3.3.0',
-  matterbridgeDevVersion: '3.3.0',
+  rootDirectory: path.join('vitest', 'DreamePlugin'),
+  homeDirectory: path.join('vitest', 'DreamePlugin'),
+  matterbridgeDirectory: path.join('vitest', 'DreamePlugin', '.matterbridge'),
+  matterbridgePluginDirectory: path.join('vitest', 'DreamePlugin', 'Matterbridge'),
+  matterbridgeCertDirectory: path.join('vitest', 'DreamePlugin', '.mattercert'),
+  globalModulesDirectory: path.join('vitest', 'DreamePlugin', 'node_modules'),
+  matterbridgeVersion: '3.4.0',
+  matterbridgeLatestVersion: '3.4.0',
+  matterbridgeDevVersion: '3.4.0',
   bridgeMode: 'bridge',
   restartMode: '',
   aggregatorVendorId: VendorId(0xfff1),
@@ -39,103 +39,53 @@ const mockMatterbridge: PlatformMatterbridge = {
   aggregatorProductId: 0x8000,
   aggregatorProductName: 'Matterbridge aggregator',
   // Mocked methods
-  registerVirtualDevice: vi.fn(async (name: string, type: 'light' | 'outlet' | 'switch' | 'mounted_switch', callback: () => Promise<void>) => {}),
-  addBridgedEndpoint: vi.fn(async (pluginName: string, device: MatterbridgeEndpoint) => {}),
-  removeBridgedEndpoint: vi.fn(async (pluginName: string, device: MatterbridgeEndpoint) => {}),
-  removeAllBridgedEndpoints: vi.fn(async (pluginName: string) => {}),
+  registerVirtualDevice: vi.fn(async (_name: string, _type: 'light' | 'outlet' | 'switch' | 'mounted_switch', _callback: () => Promise<void>) => {}),
+  addBridgedEndpoint: vi.fn(async (_pluginName: string, _device: MatterbridgeEndpoint) => {}),
+  removeBridgedEndpoint: vi.fn(async (_pluginName: string, _device: MatterbridgeEndpoint) => {}),
+  removeAllBridgedEndpoints: vi.fn(async (_pluginName: string) => {}),
 } as unknown as PlatformMatterbridge;
 
 const mockConfig: PlatformConfig = {
-  name: 'matterbridge-plugin-template',
+  name: 'matterbridge-dreame',
   type: 'DynamicPlatform',
-  version: '1.0.0',
+  version: '0.1.0',
   debug: false,
   unregisterOnShutdown: false,
+  username: 'test@example.com',
+  password: 'testpassword',
+  country: 'eu',
+  refreshInterval: 120,
 };
 
-const loggerLogSpy = vi.spyOn(AnsiLogger.prototype, 'log').mockImplementation((level: string, message: string, ...parameters: any[]) => {});
+vi.spyOn(AnsiLogger.prototype, 'log').mockImplementation((_level: string, _message: string, ..._parameters: unknown[]) => {});
 
-describe('Matterbridge Plugin Template', () => {
-  let instance: TemplatePlatform;
+describe('Matterbridge Dreame Plugin', () => {
+  let instance: DreamePlatform;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // @ts-expect-error Ignore readonly for testing purposes
+    mockMatterbridge.matterbridgeVersion = '3.4.0';
   });
 
   afterAll(() => {
     vi.restoreAllMocks();
   });
 
-  it('should throw an error if matterbridge is not the required version', async () => {
-    // @ts-expect-error Ignore readonly for testing purposes
-    mockMatterbridge.matterbridgeVersion = '2.0.0'; // Simulate an older version
-    expect(() => new TemplatePlatform(mockMatterbridge, mockLog, mockConfig)).toThrow(
-      'This plugin requires Matterbridge version >= "3.4.0". Please update Matterbridge from 2.0.0 to the latest version in the frontend.',
-    );
-    // @ts-expect-error Ignore readonly for testing purposes
-    mockMatterbridge.matterbridgeVersion = '3.4.0';
-  });
-
   it('should create an instance of the platform', async () => {
-    instance = (await import('../src/module.ts')).default(mockMatterbridge, mockLog, mockConfig) as TemplatePlatform;
-    // @ts-expect-error Accessing private method for testing purposes
-    instance.setMatterNode(
-      // @ts-expect-error Accessing private method for testing purposes
-      mockMatterbridge.addBridgedEndpoint,
-      // @ts-expect-error Accessing private method for testing purposes
-      mockMatterbridge.removeBridgedEndpoint,
-      // @ts-expect-error Accessing private method for testing purposes
-      mockMatterbridge.removeAllBridgedEndpoints,
-      // @ts-expect-error Accessing private method for testing purposes
-      mockMatterbridge.registerVirtualDevice,
-    );
-    expect(instance).toBeInstanceOf(TemplatePlatform);
+    instance = (await import('../src/module.ts')).default(mockMatterbridge, mockLog, mockConfig) as DreamePlatform;
+    expect(instance).toBeInstanceOf(DreamePlatform);
     expect(instance.matterbridge).toBe(mockMatterbridge);
     expect(instance.log).toBe(mockLog);
     expect(instance.config).toBe(mockConfig);
     expect(instance.matterbridge.matterbridgeVersion).toBe('3.4.0');
-    expect(mockLog.info).toHaveBeenCalledWith('Initializing Platform...');
   });
 
-  it('should start', async () => {
-    await instance.onStart('Jest');
-    expect(mockLog.info).toHaveBeenCalledWith('onStart called with reason: Jest');
-    await instance.onStart();
-    expect(mockLog.info).toHaveBeenCalledWith('onStart called with reason: none');
-  });
-
-  it('should call the command handlers', async () => {
-    for (const device of instance.getDevices()) {
-      if (device.hasClusterServer('onOff')) {
-        await device.executeCommandHandler('on');
-        await device.executeCommandHandler('off');
-      }
-    }
-    expect(mockLog.info).toHaveBeenCalledWith('Command on called on cluster undefined'); // Is undefined here cause the endpoint in not active
-    expect(mockLog.info).toHaveBeenCalledWith('Command off called on cluster undefined'); // Is undefined here cause the endpoint in not active
-  });
-
-  it('should configure', async () => {
-    await instance.onConfigure();
-    expect(mockLog.info).toHaveBeenCalledWith('onConfigure called');
-    expect(mockLog.info).toHaveBeenCalledWith(expect.stringContaining('Configuring device:'));
-  });
-
-  it('should change logger level', async () => {
-    await instance.onChangeLoggerLevel(LogLevel.DEBUG);
-    expect(mockLog.info).toHaveBeenCalledWith('onChangeLoggerLevel called with: debug');
-  });
-
-  it('should shutdown', async () => {
-    await instance.onShutdown('Jest');
-    expect(mockLog.info).toHaveBeenCalledWith('onShutdown called with reason: Jest');
-
-    // Mock the unregisterOnShutdown behavior
-    mockConfig.unregisterOnShutdown = true;
-    await instance.onShutdown();
-    expect(mockLog.info).toHaveBeenCalledWith('onShutdown called with reason: none');
-    // @ts-expect-error Accessing private method for testing purposes
-    expect(mockMatterbridge.removeAllBridgedEndpoints).toHaveBeenCalled();
-    mockConfig.unregisterOnShutdown = false;
+  it('should throw an error if matterbridge is not the required version', () => {
+    // @ts-expect-error Ignore readonly for testing purposes
+    mockMatterbridge.matterbridgeVersion = '2.0.0';
+    expect(() => new DreamePlatform(mockMatterbridge, mockLog, mockConfig)).toThrow(
+      'This plugin requires Matterbridge version >= "3.4.0". Please update Matterbridge from 2.0.0 to the latest version.',
+    );
   });
 });

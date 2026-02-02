@@ -21,14 +21,14 @@ All Dreame robot vacuums (`dreame.vacuum.*` models) should be supported, but onl
 
 ## Matter Clusters Exposed
 
-| Cluster | Description |
-|---------|-------------|
-| **RVC Operational State** | Start, pause, resume, go home, error states |
-| **RVC Run Mode** | Idle, Cleaning, Mapping modes |
-| **RVC Clean Mode** | Vacuum/Mop/Both, suction levels (Quiet/Standard/Strong/Turbo) |
-| **Service Area** | Room selection for targeted cleaning |
-| **Power Source** | Battery level and charging state |
-| **Identify** | Locate your vacuum (plays a sound) |
+| Cluster                   | Description                                                   |
+| ------------------------- | ------------------------------------------------------------- |
+| **RVC Operational State** | Start, pause, resume, go home, error states                   |
+| **RVC Run Mode**          | Idle, Cleaning, Mapping modes                                 |
+| **RVC Clean Mode**        | Vacuum/Mop/Both, suction levels (Quiet/Standard/Strong/Turbo) |
+| **Service Area**          | Room selection for targeted cleaning                          |
+| **Power Source**          | Battery level and charging state                              |
+| **Identify**              | Locate your vacuum (plays a sound)                            |
 
 ## Installation
 
@@ -64,13 +64,13 @@ Configure the plugin through the Matterbridge UI or edit the config file directl
 
 ### Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `username` | string | required | Your Dreame account email |
-| `password` | string | required | Your Dreame account password |
-| `country` | string | required | Region: `cn`, `eu`, `us`, `sg`, `ru`, or `in` |
-| `refreshInterval` | number | `120` | Polling interval in seconds (minimum 30) |
-| `unregisterOnShutdown` | boolean | `false` | Unregister devices when plugin stops |
+| Option                 | Type    | Default  | Description                                   |
+| ---------------------- | ------- | -------- | --------------------------------------------- |
+| `username`             | string  | required | Your Dreame account email                     |
+| `password`             | string  | required | Your Dreame account password                  |
+| `country`              | string  | required | Region: `cn`, `eu`, `us`, `sg`, `ru`, or `in` |
+| `refreshInterval`      | number  | `120`    | Polling interval in seconds (minimum 30)      |
+| `unregisterOnShutdown` | boolean | `false`  | Unregister devices when plugin stops          |
 
 ## Usage
 
