@@ -1,31 +1,29 @@
-name: Codecov
+name: Publish to npm
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**/*.md' # any .md anywhere
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - '**/*.md' # any .md anywhere
-  workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
-  test:
-    name: Run tests and collect coverage
+  publish:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
-      - name: Set up Node
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - name: Verify Node.js version
+        run: node -v
+
+      - name: Verify Npm version
+        run: npm -v
 
       - name: Clone matterbridge repo
         run: git clone --depth 1 --single-branch --no-tags https://github.com/Luligu/matterbridge.git ../matterbridge
@@ -42,16 +40,22 @@ jobs:
         working-directory: ../matterbridge
         run: npm link --no-fund --no-audit
 
-      - name: Install dependencies
+      - name: Install plugin dependencies
         run: npm ci
 
       - name: Link matterbridge in the project
         run: npm link matterbridge
 
-      - name: Run tests
-        run: npm run test:coverage -- --forceExit
+      - name: Build the plugin
+        run: npm run build
 
-      - name: Upload results to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Lint the plugin
+        run: npm run lint
+
+      - name: Test the plugin
+        run: npm run test -- --forceExit
+
+      - name: Publish the plugin to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
